@@ -41,6 +41,8 @@ class RideEstimateUseCase {
                 value: driver.rate_per_km * estimate_distance
             }
         })
+            .sort((a, b) => a.value - b.value)
+
 
         return options
     }
