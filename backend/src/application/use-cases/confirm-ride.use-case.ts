@@ -3,7 +3,7 @@ import CreateRideService from "../../domain/services/create-ride.service";
 import { CreateRideDTO } from "../dtos/create-ride.dto";
 import FindDriverService from "../../domain/services/find-driver.service";
 
-class CreateRideUseCase {
+class ConfirmRideUseCase {
     constructor(
         @Inject()
         private readonly createRideService: CreateRideService,
@@ -56,4 +56,4 @@ class CreateRideUseCase {
     }
 }
 
-export default CreateRideUseCase;
+export default ConfirmRideUseCase;
