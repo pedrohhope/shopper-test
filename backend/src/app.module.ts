@@ -5,6 +5,9 @@ import RideEstimateUseCase from './application/use-cases/ride-estimate.use-case'
 import { GoogleApiService } from './infrastructure/external-services/google-api.service';
 import { HttpModule } from '@nestjs/axios';
 import SearchDriversService from './domain/services/search-drivers.service';
+import CreateRideUseCase from './application/use-cases/create-ride.use-case';
+import CreateRideService from './domain/services/create-ride.service';
+import FindDriverService from './domain/services/find-driver.service';
 
 @Module({
   imports: [DatabaseModule, HttpModule],
@@ -13,6 +16,9 @@ import SearchDriversService from './domain/services/search-drivers.service';
     RideEstimateUseCase,
     GoogleApiService,
     SearchDriversService,
+    CreateRideUseCase,
+    CreateRideService,
+    FindDriverService
   ],
 })
 export class AppModule { }

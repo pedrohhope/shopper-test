@@ -21,6 +21,17 @@ class DriverRepository implements IDriverRepository {
 
         return drivers
     }
+
+    async findByIdAndName(id: number, name: string): Promise<DriverEntity> {
+        const driver = await this.driverRepository.findOne({
+            where: {
+                id,
+                name,
+            }
+        })
+
+        return driver
+    }
 }
 
 export default DriverRepository
