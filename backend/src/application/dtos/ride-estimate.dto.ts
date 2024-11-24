@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, Validate } from 'class-validator';
+import { IsDifferentAddresses } from 'src/domain/validators/different-addresses.validator';
 
 export class RideEstimateDTO {
     @IsNotEmpty()
@@ -11,5 +12,6 @@ export class RideEstimateDTO {
 
     @IsNotEmpty()
     @IsString()
+    @Validate(IsDifferentAddresses)
     destination: string;
 }
