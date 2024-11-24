@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity('drivers')
 export class DriverEntity {
@@ -51,4 +51,16 @@ export class DriverEntity {
         name: 'min_distance',
     })
     min_distance: number;
+
+    @Column({
+        type: 'timestamp',
+        name: 'created_at',
+    })
+    created_at: Date
+
+    @Column({
+        type: 'timestamp',
+        name: 'updated_at',
+    })
+    updated_at: Date
 }

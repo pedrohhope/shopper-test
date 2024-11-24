@@ -55,4 +55,16 @@ export class RideEntity {
         name: 'value',
     })
     value: number;
+
+    @Column({
+        type: 'timestamp',
+        name: 'created_at',
+    })
+    created_at: Date
+
+    @Column({
+        type: 'timestamp',
+        name: 'updated_at',
+    })
+    updated_at: Date
 }
