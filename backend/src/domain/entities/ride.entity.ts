@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { DriverEntity } from "./driver.entity";
 
 @Entity('rides')
@@ -56,13 +56,13 @@ export class RideEntity {
     })
     value: number;
 
-    @Column({
+    @CreateDateColumn({
         type: 'timestamp',
         name: 'created_at',
     })
     created_at: Date
 
-    @Column({
+    @UpdateDateColumn({
         type: 'timestamp',
         name: 'updated_at',
     })

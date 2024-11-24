@@ -8,6 +8,8 @@ import SearchDriversService from './domain/services/search-drivers.service';
 import ConfirmRideUseCase from './application/use-cases/confirm-ride.use-case';
 import CreateRideService from './domain/services/create-ride.service';
 import FindDriverService from './domain/services/find-driver.service';
+import GetCustomerRidesService from './domain/services/get-customer-rides.service';
+import GetCustomerRidesUseCase from './application/use-cases/get-customer-rides.use-case';
 
 @Module({
   imports: [DatabaseModule, HttpModule],
@@ -18,7 +20,9 @@ import FindDriverService from './domain/services/find-driver.service';
     SearchDriversService,
     ConfirmRideUseCase,
     CreateRideService,
-    FindDriverService
+    FindDriverService,
+    GetCustomerRidesService,
+    GetCustomerRidesUseCase
   ],
 })
 export class AppModule { }

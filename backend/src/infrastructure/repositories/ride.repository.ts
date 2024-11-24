@@ -18,6 +18,35 @@ class RideRepository implements IRideRepository {
         return !!result
     }
 
+    async findByCustomerId(customer_id: string, driver_id?: number): Promise<Partial<RideEntity[]>> {
+        const result = await this.rideRepository.find(
+            {
+                relations: ['driver'],
+                where: {
+                    customer_id,
+                    driver_id
+                },
+                order: {
+                    created_at: 'DESC'
+                },
+                select: {
+                    id: true,
+                    origin: true,
+                    destination: true,
+                    distance: true,
+                    duration: true,
+                    driver: {
+                        id: true,
+                        name: true
+                    },
+                    value: true,
+                    created_at: true
+                }
+            }
+        )
+        return result
+    }
+
 }
 
 export default RideRepository

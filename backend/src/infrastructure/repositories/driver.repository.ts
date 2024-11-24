@@ -22,11 +22,10 @@ class DriverRepository implements IDriverRepository {
         return drivers
     }
 
-    async findByIdAndName(id: number, name: string): Promise<DriverEntity> {
+    async findById(id: number): Promise<DriverEntity> {
         const driver = await this.driverRepository.findOne({
             where: {
-                id,
-                name,
+                id
             }
         })
 

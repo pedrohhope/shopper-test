@@ -20,8 +20,8 @@ class ConfirmRideUseCase {
 
 
     private async validateDriver(ride: CreateRideDTO) {
-        const { id, name } = ride.driver;
-        const driver = await this.findDriverService.execute(id, name);
+        const { id } = ride.driver;
+        const driver = await this.findDriverService.execute(id);
 
         if (!driver) {
             this.handleDriverNotFound();
