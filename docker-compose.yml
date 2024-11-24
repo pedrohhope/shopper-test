@@ -6,8 +6,6 @@ services:
     container_name: shopper-api
     ports:
       - "8080:8080"
-    env_file:
-      - ./backend/.env
     networks:
       - app-network
     depends_on:
