@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DriverEntity } from '../../domain/entities/driver.entity';
+import DriverRepository from '../repositories/driver.repository';
 
 @Module({
     imports: [
@@ -10,9 +12,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             username: 'postgres',
             password: 'password',
             database: 'shopperdb',
-            synchronize: true,
-            autoLoadEntities: true,
+            entities: [DriverEntity],
+            synchronize: false,
+            autoLoadEntities: false,
         }),
+        TypeOrmModule.forFeature([DriverEntity]),
     ],
+    providers: [DriverRepository],
+    exports: [DriverRepository],
 })
 export class DatabaseModule { }
