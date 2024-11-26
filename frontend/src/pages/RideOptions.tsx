@@ -1,5 +1,6 @@
 import { confirmRide } from "@/api/endpoints"
 import { ConfirmRideBody } from "@/api/types/ConfirmRideTypes"
+import { ErrorHandler } from "@/api/types/ErrorHandler"
 import Container from "@/components/Container"
 import DriverCard, { SelectedDriver } from "@/components/DriverCard"
 import Map from "@/components/Map"
@@ -15,23 +16,28 @@ const RideOptions = () => {
     const {
         estimate,
         options,
-        onClear,
-        ride
+        ride,
+        onClear
     } = useRide()
+
+    const navigate = useNavigate()
+
+
     const mutation = useMutation({
         mutationFn: async (data: ConfirmRideBody) => {
             return await confirmRide(data)
         },
         onSuccess: () => {
-            onClear()
             toast({
                 title: "Sucesso!",
                 description: "Viagem confirmada com sucesso!",
                 variant: "default",
             })
+            navigate("/history")
+            onClear()
         },
-        onError: (error: any) => {
-            const errorMessage = error?.error_description || "Erro inesperado. Tente novamente mais tarde."
+        onError: (error: ErrorHandler) => {
+            const errorMessage = error.error_description || "Erro inesperado. Tente novamente mais tarde."
             toast({
                 title: "Erro",
                 description: errorMessage,
@@ -40,7 +46,6 @@ const RideOptions = () => {
         },
     })
 
-    const navigate = useNavigate()
 
     const handleGoBack = () => {
         navigate(-1)
@@ -61,7 +66,7 @@ const RideOptions = () => {
             },
             duration: ride.duration,
             origin: ride.origin,
-            value
+            value,
         }
         mutation.mutate(data)
     }
@@ -83,7 +88,7 @@ const RideOptions = () => {
                         </div>
                     </div>
                 </CardHeader>
-                <CardContent className="flex flex-col flex-grow space-y-3">
+                <CardContent className="flex flex-col space-y-3">
                     <div className="w-full rounded-lg overflow-hidden flex justify-center">
                         <Map
                             pointA={estimate.origin}

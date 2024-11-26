@@ -1,4 +1,5 @@
 import { getEstimateRide } from "@/api/endpoints"
+import { ErrorHandler } from "@/api/types/ErrorHandler"
 import { GetEstimateRideBody } from "@/api/types/EstimateTypes"
 import Container from "@/components/Container"
 import { Button } from "@/components/ui/button"
@@ -78,8 +79,8 @@ const RideRequestForm = () => {
             onChangeOptions(options)
             navigate("/options")
         },
-        onError: (error: any) => {
-            const errorMessage = error?.error_description || "Erro inesperado. Tente novamente mais tarde."
+        onError: (error: ErrorHandler) => {
+            const errorMessage = error.error_description || "Erro inesperado. Tente novamente mais tarde."
             toast({
                 title: "Erro",
                 description: errorMessage,
