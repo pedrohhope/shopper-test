@@ -5,17 +5,20 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { Toaster } from "@/components/ui/toaster"
+import { RideProvider } from "./contexts/RideContext";
 const queryClient = new QueryClient()
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<RideRequestForm />} />
-        </Routes>
-      </Router>
-      <Toaster />
+      <RideProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<RideRequestForm />} />
+          </Routes>
+        </Router>
+        <Toaster />
+      </RideProvider>
     </QueryClientProvider>
   );
 };
