@@ -17,6 +17,11 @@ async function bootstrap() {
       stopAtFirstError: false,
     }),
   );
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+  })
   await app.listen(8080);
 }
 bootstrap();

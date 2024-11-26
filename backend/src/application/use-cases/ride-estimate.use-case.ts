@@ -61,7 +61,7 @@ class RideEstimateUseCase {
         } = await this.googleApiService.computeRoutes(params.origin, params.destination, 'DRIVE')
 
         return {
-            distance,
+            distance: distance / 1000,
             duration,
             origin,
             destination,
