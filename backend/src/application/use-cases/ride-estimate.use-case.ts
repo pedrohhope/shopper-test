@@ -28,7 +28,9 @@ class RideEstimateUseCase {
     private async getOptions(estimate_distance: number) {
         const drivers = await this.searchDriversService.execute(estimate_distance)
 
+        const distance_km = estimate_distance / 1000
         const options = drivers.map(driver => {
+            const rate_in_reais = driver.rate_per_km / 100;
             return {
                 id: driver.id,
                 name: driver.name,
@@ -38,7 +40,7 @@ class RideEstimateUseCase {
                     rating: driver.review_rating,
                     comment: driver.review_comment
                 },
-                value: driver.rate_per_km * (estimate_distance / 1000)
+                value: Math.round((rate_in_reais * distance_km) * 100)
             }
         })
             .sort((a, b) => a.value - b.value)
