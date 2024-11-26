@@ -18,6 +18,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useRide } from "@/contexts/RideContext"
 import { toast } from "@/hooks/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -46,13 +47,19 @@ const RideRequestForm = () => {
             destination: ""
         }
     })
+    const {
+        onChangeDrivers,
+        onChangeEstimate
+    } = useRide();
 
     const mutation = useMutation({
         mutationFn: async (data: z.infer<typeof formSchema>) => {
             return await getEstimateRide(data)
         },
         onSuccess: (data) => {
-            console.log("Resposta da API:", data)
+            const { estimate, options: drivers } = data
+            onChangeEstimate(estimate)
+            onChangeDrivers(drivers)
         },
         onError: (error: any) => {
             const errorMessage = error?.error_description || "Erro inesperado. Tente novamente mais tarde."
