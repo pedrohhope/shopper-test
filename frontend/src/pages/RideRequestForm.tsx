@@ -1,11 +1,11 @@
 import { getEstimateRide } from "@/api/endpoints"
+import { GetEstimateRideBody } from "@/api/types/EstimateTypes"
 import Container from "@/components/container"
 import { Button } from "@/components/ui/button"
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -25,39 +25,31 @@ import { MapPinned } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-const formSchema = z.object({
+const formSchema: z.ZodType<GetEstimateRideBody> = z.object({
     customer_id: z.string().min(1, {
         message: "Por favor, informe seu id",
     }),
-    destinations: z.object({
-        origin: z.string().min(1, {
-            message: "Por favor, digite um endereço de origem",
-        }),
-        destination: z.string().min(1, {
-            message: "Por favor, digite um endereço de destino",
-        }),
-    })
+    origin: z.string().min(1, {
+        message: "Por favor, digite um endereço de origem",
+    }),
+    destination: z.string().min(1, {
+        message: "Por favor, digite um endereço de destino",
+    }),
 })
 
 const RideRequestForm = () => {
-    const form = useForm({
+    const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             customer_id: "",
-            destinations: {
-                origin: "",
-                destination: ""
-            }
+            origin: "",
+            destination: ""
         }
     })
 
     const mutation = useMutation({
         mutationFn: async (data: z.infer<typeof formSchema>) => {
-            return await getEstimateRide(
-                data.customer_id,
-                data.destinations.origin,
-                data.destinations.destination
-            )
+            return await getEstimateRide(data)
         },
         onSuccess: (data) => {
             console.log("Resposta da API:", data)
@@ -103,7 +95,7 @@ const RideRequestForm = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="destinations.origin"
+                                    name="origin"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Endereço de origem</FormLabel>
@@ -117,7 +109,7 @@ const RideRequestForm = () => {
 
                                 <FormField
                                     control={form.control}
-                                    name="destinations.destination"
+                                    name="destination"
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Endereço de destino</FormLabel>

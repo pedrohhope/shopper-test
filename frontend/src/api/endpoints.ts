@@ -1,18 +1,12 @@
+import { AxiosResponse } from "axios"
 import apiClient from "./client"
+import { GetEstimateRideBody, GetEstimateRideResponse } from "./types/EstimateTypes"
 
-export const getEstimateRide = async (
-    customer_id: string,
-    origin: string,
-    destination: string
-) => {
+export const getEstimateRide = async (data: GetEstimateRideBody) => {
     try {
-        const response = await apiClient.post(
+        const response: AxiosResponse<GetEstimateRideResponse> = await apiClient.post(
             "/ride/estimate",
-            {
-                customer_id,
-                origin,
-                destination,
-            }
+            data
         )
         return response.data
     } catch (error: any) {
