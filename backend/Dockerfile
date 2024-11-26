@@ -1,29 +1,25 @@
-FROM node:23.2.0-alpine AS build
+FROM node:23.2.0-alpine
 
 RUN apk add --no-cache postgresql-client
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
-RUN npm install --production
+RUN npm install
 
 COPY . .
 
-RUN npm run build
+COPY wait-for-db.sh /usr/src/app/wait-for-db.sh
 
-FROM node:23.2.0-alpine AS production
-
-RUN apk add --no-cache postgresql-client
-
-WORKDIR /app
-
-COPY --from=build /app/package.json /app/package-lock.json ./
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/src/infrastructure/database/seeds/drivers.sql ./seeds/drivers.sql
-
-RUN npm install --production
+ENV DB_HOST=db
+ENV DB_PORT=5432
+ENV DB_USERNAME=postgres
+ENV DB_PASSWORD=password
+ENV DB_DATABASE=shopperdb
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "node dist/main & ./run-seed.sh"]
+RUN chmod +x /usr/src/app/wait-for-db.sh
+
+CMD ["./wait-for-db.sh"]

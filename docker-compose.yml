@@ -16,6 +16,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=password
       - DB_DATABASE=shopperdb
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
 
   frontend:
     build:
@@ -24,8 +25,9 @@ services:
     container_name: shopper-frontend
     ports:
       - "80:80"
-    env_file:
-      - ./frontend/.env
+    environment:
+      - VITE_GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - VITE_API_URL=http://backend:8080
     networks:
       - app-network
     depends_on:
@@ -33,20 +35,20 @@ services:
 
   db:
     image: postgres:17-alpine
-    container_name: postgres
+    container_name: shopper-db-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: shopperdb
     ports:
       - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
     networks:
       - app-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  db-data:
 
 
 networks:
