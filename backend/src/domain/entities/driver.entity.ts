@@ -29,7 +29,7 @@ export class DriverEntity {
     @Column({
         type: 'varchar',
         name: 'review_rating',
-        length: 150
+        length: 1
     })
     review_rating: string;
 
