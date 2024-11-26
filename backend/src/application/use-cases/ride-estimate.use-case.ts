@@ -38,7 +38,7 @@ class RideEstimateUseCase {
                     rating: driver.review_rating,
                     comment: driver.review_comment
                 },
-                value: driver.rate_per_km * estimate_distance
+                value: driver.rate_per_km * (estimate_distance / 1000)
             }
         })
             .sort((a, b) => a.value - b.value)
@@ -61,7 +61,7 @@ class RideEstimateUseCase {
         } = await this.googleApiService.computeRoutes(params.origin, params.destination, 'DRIVE')
 
         return {
-            distance: distance / 1000,
+            distance,
             duration,
             origin,
             destination,

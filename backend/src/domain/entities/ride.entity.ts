@@ -28,7 +28,7 @@ export class RideEntity {
     destination: string;
 
     @Column({
-        type: 'float',
+        type: 'int',
         name: 'distance',
     })
     distance: number;

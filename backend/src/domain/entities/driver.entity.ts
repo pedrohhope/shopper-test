@@ -47,7 +47,7 @@ export class DriverEntity {
     rate_per_km: number;
 
     @Column({
-        type: 'float',
+        type: 'int',
         name: 'min_distance',
     })
     min_distance: number;

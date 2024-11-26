@@ -15,7 +15,10 @@ class ConfirmRideUseCase {
     async execute(ride: CreateRideDTO) {
         await this.validateDriver(ride);
 
-        return await this.createRideService.execute(ride);
+        return await this.createRideService.execute({
+            ...ride,
+            value: ride.value * 100
+        });
     }
 
 
