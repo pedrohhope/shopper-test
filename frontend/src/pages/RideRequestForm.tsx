@@ -64,6 +64,7 @@ const RideRequestForm = () => {
             return await getEstimateRide(data)
         },
         onSuccess: (data) => {
+            if (!data) return;
             const { estimate, options } = data
             onChangeRide({
                 ...ride,

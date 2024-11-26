@@ -2,6 +2,11 @@ import { Review } from "@/api/types/EstimateTypes";
 import { formatPrice } from "@/utils/price";
 import { Button } from "./ui/button";
 
+export type SelectedDriver = {
+    id: number,
+    name: string,
+    value: number
+}
 interface DriverCardProps {
     id: number;
     name: string;
@@ -9,11 +14,16 @@ interface DriverCardProps {
     vehicle: string;
     review: Review;
     value: number;
-    onSelect: (id: number) => void;
+    onSelect: ({
+        id,
+        name,
+        value
+    }: SelectedDriver) => void;
     hasSelected: boolean;
+    disabled?: boolean
 }
 
-const DriverCard = ({ id, name, description, vehicle, review, value, onSelect, hasSelected }: DriverCardProps) => {
+const DriverCard = ({ id, name, description, vehicle, review, value, onSelect, hasSelected, disabled }: DriverCardProps) => {
     const rating = Number(review.rating);
 
     return (
@@ -53,7 +63,7 @@ const DriverCard = ({ id, name, description, vehicle, review, value, onSelect, h
 
                 {hasSelected && (
                     <div className="flex justify-end">
-                        <Button onClick={() => onSelect(id)} className="w-full">
+                        <Button onClick={() => onSelect({ id, name, value })} className="w-full" disabled={disabled}>
                             Escolher
                         </Button>
                     </div>

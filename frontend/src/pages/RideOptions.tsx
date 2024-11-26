@@ -1,9 +1,13 @@
+import { confirmRide } from "@/api/endpoints"
+import { ConfirmRideBody } from "@/api/types/ConfirmRideTypes"
 import Container from "@/components/Container"
-import DriverCard from "@/components/DriverCard"
+import DriverCard, { SelectedDriver } from "@/components/DriverCard"
 import Map from "@/components/Map"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useRide } from "@/contexts/RideContext"
+import { toast } from "@/hooks/use-toast"
+import { useMutation } from "@tanstack/react-query"
 import { CarFront, ArrowLeft } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
@@ -11,7 +15,30 @@ const RideOptions = () => {
     const {
         estimate,
         options,
+        onClear,
+        ride
     } = useRide()
+    const mutation = useMutation({
+        mutationFn: async (data: ConfirmRideBody) => {
+            return await confirmRide(data)
+        },
+        onSuccess: () => {
+            onClear()
+            toast({
+                title: "Sucesso!",
+                description: "Viagem confirmada com sucesso!",
+                variant: "default",
+            })
+        },
+        onError: (error: any) => {
+            const errorMessage = error?.error_description || "Erro inesperado. Tente novamente mais tarde."
+            toast({
+                title: "Erro",
+                description: errorMessage,
+                variant: "destructive",
+            })
+        },
+    })
 
     const navigate = useNavigate()
 
@@ -19,13 +46,29 @@ const RideOptions = () => {
         navigate(-1)
     }
 
-    const onSelectDriver = (id: number) => {
-        console.log(id)
+    const onSelectDriver = ({
+        id,
+        name,
+        value,
+    }: SelectedDriver) => {
+        const data: ConfirmRideBody = {
+            customer_id: ride.customer_id,
+            destination: ride.destination,
+            distance: ride.distance,
+            driver: {
+                id,
+                name
+            },
+            duration: ride.duration,
+            origin: ride.origin,
+            value
+        }
+        mutation.mutate(data)
     }
 
     return (
         <Container>
-            <Card className="shadow-lg rounded-lg border border-gray-200 flex flex-col h-full">
+            <Card className="shadow-lg rounded-lg border border-gray-200 flex flex-col">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <button onClick={handleGoBack} className="p-2 rounded-full hover:bg-gray-200">
@@ -51,7 +94,7 @@ const RideOptions = () => {
                     {options.length ? <ScrollArea className="rounded-md overflow-auto" >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[400px]">
                             {options.map((option) => (
-                                <DriverCard key={option.id} {...option} onSelect={onSelectDriver} hasSelected />
+                                <DriverCard key={option.id} {...option} onSelect={onSelectDriver} hasSelected disabled={mutation.isPending} />
                             ))}
                         </div>
                     </ScrollArea> :

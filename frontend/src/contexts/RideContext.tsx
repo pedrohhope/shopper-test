@@ -7,11 +7,6 @@ interface Ride {
     destination: string;
     distance: number;
     duration: string;
-    driver: {
-        id: number;
-        name: string
-    },
-    value: number;
 }
 interface RideContextType {
     estimate: Estimate
@@ -20,6 +15,7 @@ interface RideContextType {
     onChangeOptions: (options: Option[]) => void
     ride: Ride
     onChangeRide: (ride: Ride) => void
+    onClear: () => void
 }
 
 const initialState: RideContextType = {
@@ -33,13 +29,9 @@ const initialState: RideContextType = {
         destination: "",
         distance: 0,
         duration: "",
-        driver: {
-            id: 0,
-            name: ""
-        },
-        value: 0
     },
-    onChangeRide: () => { }
+    onChangeRide: () => { },
+    onClear: () => { }
 };
 
 const RideContextType = createContext<RideContextType>(initialState);
@@ -63,9 +55,14 @@ export function RideProvider({ children }: RideProviderProps) {
         setRide(ride);
     }
 
+    const onClear = () => {
+        setOptions(initialState.options);
+        setRide(initialState.ride);
+        setEstimate(initialState.estimate);
+    }
 
     return (
-        <RideContextType.Provider value={{ onChangeRide, options, onChangeOptions: onChangeOptions, ride, onChangeEstimate, estimate }}>
+        <RideContextType.Provider value={{ onChangeRide, options, onChangeOptions: onChangeOptions, ride, onChangeEstimate, estimate, onClear }}>
             {children}
         </RideContextType.Provider>
     );
