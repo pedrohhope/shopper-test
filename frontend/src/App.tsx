@@ -1,17 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { Button } from './components/ui/button'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { RideRequestForm } from "./pages";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { Toaster } from "@/components/ui/toaster"
+const queryClient = new QueryClient()
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <p>{count}</p>
-      <Button onClick={() => setCount(count + 1)}>Increment</Button>
-    </>
-  )
-}
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<RideRequestForm />} />
+        </Routes>
+      </Router>
+      <Toaster />
+    </QueryClientProvider>
+  );
+};
 
-export default App
+export default App;
