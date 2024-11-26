@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query'
 import { Toaster } from "@/components/ui/toaster"
 import { RideProvider } from "./contexts/RideContext";
+import RideOptions from "./pages/RideOptions";
 const queryClient = new QueryClient()
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Router>
           <Routes>
             <Route path="/" element={<RideRequestForm />} />
+            <Route path="/options" element={<RideOptions />} />
           </Routes>
         </Router>
         <Toaster />

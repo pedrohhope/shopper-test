@@ -1,6 +1,6 @@
 import { getEstimateRide } from "@/api/endpoints"
 import { GetEstimateRideBody } from "@/api/types/EstimateTypes"
-import Container from "@/components/container"
+import Container from "@/components/Container"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { MapPinned } from "lucide-react"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 import { z } from "zod"
 
 const formSchema: z.ZodType<GetEstimateRideBody> = z.object({
@@ -39,18 +40,24 @@ const formSchema: z.ZodType<GetEstimateRideBody> = z.object({
 })
 
 const RideRequestForm = () => {
+    const {
+        onChangeOptions,
+        onChangeRide,
+        ride,
+        onChangeEstimate
+    } = useRide();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            customer_id: "",
-            origin: "",
-            destination: ""
+            customer_id: ride.customer_id,
+            origin: ride.origin,
+            destination: ride.destination
         }
     })
-    const {
-        onChangeOptions,
-        onChangeEstimate
-    } = useRide();
+
+    const navigate = useNavigate();
+
 
     const mutation = useMutation({
         mutationFn: async (data: z.infer<typeof formSchema>) => {
@@ -58,8 +65,17 @@ const RideRequestForm = () => {
         },
         onSuccess: (data) => {
             const { estimate, options } = data
+            onChangeRide({
+                ...ride,
+                customer_id: form.getValues("customer_id"),
+                distance: estimate.distance,
+                duration: estimate.duration,
+                destination: form.getValues("destination"),
+                origin: form.getValues("origin"),
+            })
             onChangeEstimate(estimate)
             onChangeOptions(options)
+            navigate("/options")
         },
         onError: (error: any) => {
             const errorMessage = error?.error_description || "Erro inesperado. Tente novamente mais tarde."
@@ -77,7 +93,7 @@ const RideRequestForm = () => {
 
     return (
         <Container>
-            <Card>
+            <Card className="h-full">
                 <CardHeader>
                     <CardTitle className="flex gap-2"><MapPinned /> Solicite sua viagem</CardTitle>
                     <CardDescription>Você deve preencher todos os campos para solicitar uma viagem</CardDescription>
@@ -99,7 +115,7 @@ const RideRequestForm = () => {
                                 )}
                             />
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
                                     name="origin"
