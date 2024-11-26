@@ -48,7 +48,7 @@ const RideRequestForm = () => {
         }
     })
     const {
-        onChangeDrivers,
+        onChangeOptions,
         onChangeEstimate
     } = useRide();
 
@@ -57,9 +57,9 @@ const RideRequestForm = () => {
             return await getEstimateRide(data)
         },
         onSuccess: (data) => {
-            const { estimate, options: drivers } = data
+            const { estimate, options } = data
             onChangeEstimate(estimate)
-            onChangeDrivers(drivers)
+            onChangeOptions(options)
         },
         onError: (error: any) => {
             const errorMessage = error?.error_description || "Erro inesperado. Tente novamente mais tarde."

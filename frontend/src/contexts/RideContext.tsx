@@ -4,15 +4,15 @@ import { createContext, ReactNode, useContext, useState } from "react";
 interface RideContextType {
     estimate: Estimate
     onChangeEstimate: (estimate: Estimate) => void
-    drivers: Option[]
-    onChangeDrivers: (drivers: Option[]) => void
+    options: Option[]
+    onChangeOptions: (options: Option[]) => void
 }
 
 const initialState: RideContextType = {
     estimate: {} as Estimate,
     onChangeEstimate: () => { },
-    drivers: [],
-    onChangeDrivers: () => { }
+    options: [],
+    onChangeOptions: () => { }
 };
 
 const RideContextType = createContext<RideContextType>(initialState);
@@ -23,17 +23,17 @@ interface RideProviderProps {
 
 export function RideProvider({ children }: RideProviderProps) {
     const [estimate, setEstimate] = useState<Estimate>(initialState.estimate);
-    const [drivers, setDrivers] = useState<Option[]>(initialState.drivers);
+    const [options, setOptions] = useState<Option[]>(initialState.options);
 
     const onChangeEstimate = (estimate: Estimate) => {
         setEstimate(estimate);
     }
 
-    const onChangeDrivers = (drivers: Option[]) => {
-        setDrivers(drivers);
+    const onChangeOptions = (options: Option[]) => {
+        setOptions(options);
     }
     return (
-        <RideContextType.Provider value={{ estimate, onChangeEstimate, drivers, onChangeDrivers }}>
+        <RideContextType.Provider value={{ estimate, onChangeEstimate, options, onChangeOptions: onChangeOptions }}>
             {children}
         </RideContextType.Provider>
     );
