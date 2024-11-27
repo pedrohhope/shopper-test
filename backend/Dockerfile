@@ -10,6 +10,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm run build
+
 COPY wait-for-db.sh /usr/src/app/wait-for-db.sh
 
 ENV DB_HOST=db
