@@ -10,6 +10,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    VITE_GOOGLE_API_KEY: JSON.stringify(`${process.env.VITE_GOOGLE_API_KEY}`),
+    VITE_API_URL: JSON.stringify(`${process.env.VITE_API_URL}`),
+  },
   server: {
     port: 3000,
   }

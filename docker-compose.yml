@@ -22,12 +22,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_GOOGLE_API_KEY=${GOOGLE_API_KEY}
+        - VITE_API_URL=http://localhost:8080
     container_name: shopper-frontend
     ports:
       - "80:80"
-    environment:
-      - VITE_GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - VITE_API_URL=http://backend:8080
     networks:
       - app-network
     depends_on:
