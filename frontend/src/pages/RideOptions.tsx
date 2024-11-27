@@ -10,14 +10,14 @@ import { useRide } from "@/contexts/RideContext"
 import { toast } from "@/hooks/use-toast"
 import { useMutation } from "@tanstack/react-query"
 import { CarFront, ArrowLeft } from "lucide-react"
+import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 const RideOptions = () => {
     const {
         estimate,
         options,
-        ride,
-        onClear
+        ride
     } = useRide()
 
     const navigate = useNavigate()
@@ -34,7 +34,6 @@ const RideOptions = () => {
                 variant: "default",
             })
             navigate("/history")
-            onClear()
         },
         onError: (error: ErrorHandler) => {
             const errorMessage = error.error_description || "Erro inesperado. Tente novamente mais tarde."
@@ -70,6 +69,11 @@ const RideOptions = () => {
         }
         mutation.mutate(data)
     }
+
+    useEffect(() => {
+        console.log(options)
+        if (!options.length) navigate("/")
+    }, [options])
 
     return (
         <Container>

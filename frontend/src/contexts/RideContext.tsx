@@ -58,6 +58,7 @@ export function RideProvider({ children }: RideProviderProps) {
     const onClear = () => {
         setRide(initialState.ride);
         setEstimate(initialState.estimate);
+        setOptions(initialState.options);
     }
 
     return (

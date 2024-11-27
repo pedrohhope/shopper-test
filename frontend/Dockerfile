@@ -2,20 +2,20 @@ FROM node:22.11.0-alpine3.19 AS build
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
 ARG VITE_GOOGLE_API_KEY
 ENV VITE_GOOGLE_API_KEY=$VITE_GOOGLE_API_KEY
 
-RUN npm install -frozen-lockfile
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 FROM node:22.11.0-alpine3.19
 
-RUN npm install serve -g
+RUN yarn global add serve
 
 WORKDIR /app
 

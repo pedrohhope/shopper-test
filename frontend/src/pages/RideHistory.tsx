@@ -21,7 +21,7 @@ const RideHistory = () => {
         driver_id: undefined,
     })
 
-    const { options } = useRide()
+    const { options, onClear } = useRide()
     const navigate = useNavigate()
     const [rides, setRides] = useState<Ride[]>([])
 
@@ -61,6 +61,7 @@ const RideHistory = () => {
 
     const hangleBackRequestForm = () => {
         navigate('/')
+        onClear()
     }
 
     const searchRides = () => {

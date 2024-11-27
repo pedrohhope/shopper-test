@@ -4,13 +4,13 @@ RUN apk add --no-cache bash git
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-RUN npm install --frozen-lockfile
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+RUN yarn build
 
 COPY wait-for-db.sh /usr/src/app/wait-for-db.sh
 
@@ -22,7 +22,8 @@ WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/package*.json ./
+COPY --from=builder /usr/src/app/package.json ./package.json
+COPY --from=builder /usr/src/app/yarn.lock ./yarn.lock
 COPY --from=builder /usr/src/app/wait-for-db.sh .
 
 EXPOSE 8080
