@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 
 interface LatLng {
@@ -27,18 +27,18 @@ export interface GoogleApiResponse {
 }
 
 interface Response {
-    distance: number,
-    duration: string,
+    distance: number;
+    duration: string;
     origin: {
-        latitude: number,
-        longitude: number,
-    },
+        latitude: number;
+        longitude: number;
+    };
     destination: {
-        latitude: number
-        longitude: number,
-    },
-    routeResponse: GoogleApiResponse
-};
+        latitude: number;
+        longitude: number;
+    };
+    routeResponse: GoogleApiResponse;
+}
 
 @Injectable()
 export class GoogleApiService {
@@ -53,12 +53,8 @@ export class GoogleApiService {
             const response: AxiosResponse<GoogleApiResponse> = await this.httpService.axiosRef.post(
                 url,
                 {
-                    origin: {
-                        address: origin,
-                    },
-                    destination: {
-                        address: destination,
-                    },
+                    origin: { address: origin },
+                    destination: { address: destination },
                     travelMode,
                 },
                 {
@@ -84,17 +80,22 @@ export class GoogleApiService {
                     latitude: leg.endLocation.latLng.latitude,
                     longitude: leg.endLocation.latLng.longitude,
                 },
-                routeResponse: response.data
+                routeResponse: response.data,
             };
-
         } catch (error) {
             console.error('Erro na resposta da API:', error.response?.data || error.message);
+
+            const statusCode = error.response?.status || HttpStatus.BAD_REQUEST;
+            const apiError = error.response?.data?.error || {};
+            const userFriendlyMessage =
+                apiError.message || 'Erro ao processar a rota. Verifique os endereços fornecidos e tente novamente.';
+
             const message = {
-                error_code: "INVALID_REQUEST",
-                error_description: "Google API error",
-            }
-            throw message;
+                error_code: apiError.code || 'INVALID_REQUEST',
+                error_description: userFriendlyMessage,
+            };
+
+            throw new HttpException(message, statusCode);
         }
     }
-
 }
